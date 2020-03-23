@@ -12,7 +12,6 @@ export default ({ player, nextToPlay, requestBazas, doneRequesting, me, winner, 
   };
 
   useEffect(() => {
-    console.log('animate winner:', winner, winner === player.id ? !animateWinner : animateWinner)
     setAnimateWinner(winner === player.id ? !animateWinner : animateWinner);
   }, [winner]);
 

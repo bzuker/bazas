@@ -51,6 +51,10 @@ function Game() {
       setPlayers(roomInfo.players);
       setCurrentRound(roomInfo.currentRound);
       setOpen(false);
+
+      socket.io.opts.query = {
+        id: player.id
+      };
     };
 
     const handlePlayerJoin = (player) =>
