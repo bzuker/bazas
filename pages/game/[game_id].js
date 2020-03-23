@@ -6,10 +6,9 @@ import Player from '../../components/Player';
 import MyCards from '../../components/MyCards';
 import NameModal from '../../components/NameModal';
 
-function Game(params) {
+function Game() {
   const router = useRouter()
   const { game_id: gameId } = router.query
-  console.log('game', gameId, params);
   const [players, setPlayers] = useState([]);
   const [me, setMe] = useState(null);
   const [cards, setCards] = useState([]);
@@ -132,7 +131,6 @@ function Game(params) {
 }
 
 export async function getServerSideProps({params}) {
-  console.log('params!', params);
   // Pass data to the page via props
   return { props: { gameId: params.game_id } }
 }

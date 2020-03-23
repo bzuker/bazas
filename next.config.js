@@ -2,7 +2,7 @@ const withCSS = require("@zeit/next-css");
 
 module.exports = withCSS({
   env: {
-    SERVER_URL: 'https://qsog1.sse.codesandbox.io'
+    SERVER_URL: 'https://bazas-server.herokuapp.com'
   },
   target: "serverless",
   webpack(config) {

@@ -2,7 +2,7 @@ import { Menu, Image } from "semantic-ui-react";
 
 const Card = ({ card, onClick }) => (
   <Menu.Item onClick={onClick}>
-    <Image src={card ? `https://deckofcardsapi.com/static/img/${card.key}.png`: "backside.jpg"} size="small" />
+    <Image src={card ? `/${card.key}.png`: "backside.jpg"} size="small" />
   </Menu.Item>
 );
 
