@@ -5,6 +5,7 @@ import useSocket from '../../hooks/useSocket';
 import Player from '../../components/Player';
 import MyCards from '../../components/MyCards';
 import NameModal from '../../components/NameModal';
+import Scoretable from '../../components/Scoretable';
 
 function Game() {
   const router = useRouter()
@@ -15,6 +16,7 @@ function Game() {
   const [currentRound, setCurrentRound] = useState({});
   const [open, setOpen] = useState(false);
   const [showMessage, setShowMessage] = useState(true);
+  const [scoretable, setScoretable] = useState(null);
   const [socket] = useSocket(`${process.env.SERVER_URL}/${gameId}`, { autoConnect: false });
 
   const handleSubmit = (name) => {
@@ -67,7 +69,8 @@ function Game() {
     });
 
     socket.on('disconnect', () => {
-      console.log('Disconnected');
+      console.log('Disconnected, trying to reconnect');
+      socket.connect();
     });
 
     socket.on('join', handlePlayerJoin);
@@ -77,6 +80,7 @@ function Game() {
       console.log('game started', roomInfo);
       setCurrentRound(roomInfo.currentRound);
     });
+    socket.on('game over', scoretable => setScoretable(scoretable));
 
     socket.on('cards', (cards) => {
       setCards(cards);
@@ -90,6 +94,7 @@ function Game() {
 
   return (
     <>
+      <Scoretable scores={scoretable} />
       <NameModal open={open} handleSubmit={handleSubmit} />
       {me && showMessage && !currentRound.started ? (
         <Message icon>

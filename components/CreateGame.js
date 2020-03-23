@@ -43,11 +43,14 @@ const endingAt = [
   }
 ];
 function CreateGame() {
+  const [loading, setIsLoading] = useState(false);
   const [startWith, setStartWith] = useState(startingAt[2].value);
   const [endWith, setEndWith] = useState(endingAt[2].value);
   const [gameId, setGameId] = useState(null);
   const handleSubmit = async () => {
+    setIsLoading(true);
     const response = await axios.post(`${process.env.SERVER_URL}/create`, { startWith, endWith });
+    setIsLoading(false);
     setGameId(response.data.id);
   };
   return (
@@ -71,7 +74,7 @@ function CreateGame() {
           inline
           onChange={(evt, { value }) => setEndWith(value)}
         />
-        <Button color="blue" onClick={handleSubmit}>Crear</Button>
+        <Button color="blue" onClick={handleSubmit} loading={loading}>Crear</Button>
       </Form>
       {gameId && <Form.Input value={gameId} readOnly style={{marginTop: '2em'}} />}
     </>
