@@ -116,7 +116,7 @@ function Game() {
       {
         me &&
         <>
-          {currentRound.triumphCard && <Image src={`https://deckofcardsapi.com/static/img/${currentRound.triumphCard.key}.png`} size='tiny' centered style={{marginBottom: '2em'}} />}
+          {currentRound.triumphCard && <Image src={`/${currentRound.triumphCard.key}.png`} size='tiny' centered style={{marginBottom: '2em'}} />}
           <Card.Group centered>
           {
           players.map(x => ( 
