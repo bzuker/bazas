@@ -9,6 +9,7 @@ function CreateGame() {
   const [startWith, setStartWith] = useState(3);
   const [endWith, setEndWith] = useState(8);
   const [gameId, setGameId] = useState(null);
+  const [selectStartingPlayer, setSelectStartingPlayer] = useState(false);
   const handleSubmit = async () => {
     if (endWith < startWith) {
       alert('No podés terminar con menos cartas que las que empezás');
@@ -16,34 +17,41 @@ function CreateGame() {
     }
 
     setIsLoading(true);
-    const response = await axios.post(`${process.env.SERVER_URL}/create`, { startWith, endWith });
+    const response = await axios.post(`${process.env.SERVER_URL}/create`, { startWith, endWith, selectStartingPlayer });
     setIsLoading(false);
     setGameId(response.data.id);
   };
   return (
     <>
-      <Header icon textAlign="center">
-        <Icon name="plus" />
+      <Header icon textAlign='center'>
+        <Icon name='plus' />
         Crear nuevo juego
       </Header>
       <Form>
         <Form.Dropdown
-          label="Empezando con"
+          label='Empezando con'
           options={startingAt}
           value={startWith}
           inline
           onChange={(evt, { value }) => setStartWith(value)}
         />
         <Form.Dropdown
-          label="Terminando con"
+          label='Terminando con'
           options={endingAt}
           value={endWith}
           inline
           onChange={(evt, { value }) => setEndWith(value)}
         />
-        <Button color="blue" onClick={handleSubmit} loading={loading}>Crear</Button>
+        <Form.Checkbox
+          label='Elegir jugador inicial'
+          checked={selectStartingPlayer}
+          onChange={() => setSelectStartingPlayer(!selectStartingPlayer )}
+        />
+        <Button color='blue' onClick={handleSubmit} loading={loading}>
+          Crear
+        </Button>
       </Form>
-      {gameId && <Form.Input value={gameId} readOnly style={{marginTop: '2em'}} />}
+      {gameId && <Form.Input value={gameId} readOnly style={{ marginTop: '2em' }} />}
     </>
   );
 }

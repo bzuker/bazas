@@ -7,6 +7,7 @@ import MyCards from '../../components/MyCards';
 import NameModal from '../../components/NameModal';
 import Scoretable from '../../components/Scoretable';
 import Triumph from '../../components/Triumph';
+import StartGame from '../../components/StartGame';
 
 function Game() {
   const router = useRouter();
@@ -18,6 +19,7 @@ function Game() {
   const [open, setOpen] = useState(false);
   const [showMessage, setShowMessage] = useState(true);
   const [scoretable, setScoretable] = useState(null);
+  const [selectStartingPlayer, setSelectStartingPlayer] = useState(null);
   const [socket] = useSocket(`${process.env.SERVER_URL}/${gameId}`, { autoConnect: false });
 
   const handleSubmit = (name, pwd) => {
@@ -28,9 +30,9 @@ function Game() {
     socket.emit('add player', name, pwd);
   };
 
-  const startGame = () => {
+  const startGame = (player) => {
     setShowMessage(false);
-    socket.emit('start game');
+    socket.emit('start game', player);
   };
 
   const requestBazas = (playerId, bazas) => {
@@ -51,6 +53,7 @@ function Game() {
       setMe(player);
       setPlayers(roomInfo.players);
       setCurrentRound(roomInfo.currentRound);
+      setSelectStartingPlayer(roomInfo.settings.selectStartingPlayer)
       setOpen(false);
 
       socket.io.opts.query = {
@@ -108,9 +111,7 @@ function Game() {
           <Message.Content>
             <Message.Header>
               Esperando jugadores...
-              <Button floated='right' primary onClick={startGame}>
-                Empezar
-              </Button>
+              <StartGame players={players} selectStartingPlayer={selectStartingPlayer} startGame={startGame} />
             </Message.Header>
           </Message.Content>
         </Message>
