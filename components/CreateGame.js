@@ -11,11 +11,6 @@ function CreateGame() {
   const [gameId, setGameId] = useState(null);
   const [selectStartingPlayer, setSelectStartingPlayer] = useState(false);
   const handleSubmit = async () => {
-    if (endWith < startWith) {
-      alert('No podés terminar con menos cartas que las que empezás');
-      return;
-    }
-
     setIsLoading(true);
     const response = await axios.post(`${process.env.SERVER_URL}/create`, { startWith, endWith, selectStartingPlayer });
     setIsLoading(false);
