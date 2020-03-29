@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Card, List, Label, Image, Dropdown, Button, Transition } from 'semantic-ui-react';
 
-export default ({ player, nextToPlay, requestBazas, doneRequesting, me, winner, cards }) => {
+export default ({ player, nextToPlay, requestBazas, doneRequesting, me, winner, cards, playedFirst }) => {
   const [bazas, setBazas] = useState(0);
   const [animateWinner, setAnimateWinner] = useState(false);
   const hasToPlay = me.id === player.id && nextToPlay === player.id;
-  const options = Array.from({ length: cards + 1 }, (v, i) => i).map(x => ({key: x, text: x, value: x}));
+  const options = Array.from({ length: cards + 1 }, (v, i) => i).map(x => ({ key: x, text: x, value: x }));
   const handleChange = (evt, { value }) => setBazas(value);
   const handleBazaRequest = () => {
     requestBazas(player.id, bazas);
@@ -30,6 +30,11 @@ export default ({ player, nextToPlay, requestBazas, doneRequesting, me, winner, 
                 Juega
               </Label>
             )}
+            {nextToPlay !== player.id && playedFirst === player.id && (
+              <Label basic color='orange' pointing='left'>
+                Empezó
+              </Label>
+            )}
           </Card.Header>
           <Card.Description>
             <List>
@@ -38,13 +43,7 @@ export default ({ player, nextToPlay, requestBazas, doneRequesting, me, winner, 
                 {!doneRequesting && hasToPlay ? (
                   <>
                     <Button as='div' labelPosition='left'>
-                      <Dropdown
-                        value={bazas}
-                        options={options}
-                        selection
-                        className='label'
-                        onChange={handleChange}
-                      />
+                      <Dropdown value={bazas} options={options} selection className='label' onChange={handleChange} />
                       <Button onClick={handleBazaRequest}>OK</Button>
                     </Button>
                   </>
@@ -59,7 +58,7 @@ export default ({ player, nextToPlay, requestBazas, doneRequesting, me, winner, 
             {player.score}
           </Label>
         </Card.Content>
-        <Image src={player.playedCard ? `/${player.playedCard.key}.png`: "/backside.jpg"} size='tiny' />
+        <Image src={player.playedCard ? `/${player.playedCard.key}.png` : '/backside.jpg'} size='tiny' />
       </Card>
     </Transition>
   );

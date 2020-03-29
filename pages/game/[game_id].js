@@ -9,6 +9,22 @@ import Scoretable from '../../components/Scoretable';
 import Triumph from '../../components/Triumph';
 import StartGame from '../../components/StartGame';
 
+const getFirstPlayer = currentRound => {
+  if (!currentRound || !currentRound.playedCards) {
+    return null;
+  }
+
+  if (currentRound.playedCards.length > 0) {
+    return currentRound.playedCards[0].playerId;
+  }
+
+  if (currentRound.winners.length > 0) {
+    return currentRound.winners[currentRound.winners.length - 1]
+  }
+
+  return currentRound.firstToPlay;
+};
+
 function Game() {
   const router = useRouter();
   const { game_id: gameId } = router.query;
@@ -127,6 +143,7 @@ function Game() {
                 key={x.id}
                 player={x}
                 nextToPlay={currentRound.nextToPlay}
+                playedFirst={getFirstPlayer(currentRound)}
                 me={me}
                 doneRequesting={currentRound.doneRequestingBazas}
                 requestBazas={requestBazas}

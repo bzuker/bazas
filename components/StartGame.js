@@ -3,7 +3,6 @@ import {Button, Dropdown} from 'semantic-ui-react';
 
 function StartGame({ selectStartingPlayer, players, startGame }) {
   const [startingPlayer, setStartingPlayer] = useState(null);
-  console.log(startingPlayer);
   if (selectStartingPlayer) {
     const options = players.map(x => ({
       key: x.id,
