@@ -8,6 +8,7 @@ import NameModal from '../../components/NameModal';
 import Scoretable from '../../components/Scoretable';
 import Triumph from '../../components/Triumph';
 import StartGame from '../../components/StartGame';
+import Toast from '../../components/Toast';
 
 const getFirstPlayer = currentRound => {
   if (!currentRound || !currentRound.playedCards) {
@@ -36,6 +37,7 @@ function Game() {
   const [showMessage, setShowMessage] = useState(true);
   const [scoretable, setScoretable] = useState(null);
   const [selectStartingPlayer, setSelectStartingPlayer] = useState(null);
+  const [invalidMessage, setInvalidMessage] = useState('');
   const [socket] = useSocket(`${process.env.SERVER_URL}/${gameId}`, { autoConnect: false });
 
   const handleSubmit = (name, pwd) => {
@@ -85,6 +87,11 @@ function Game() {
       setPlayers(roomInfo.players);
     };
 
+    const handleInvalid = message => {
+      setInvalidMessage(message);
+      setTimeout(() => setInvalidMessage(''), 3000);
+    };
+
     setOpen(true);
     socket.connect();
 
@@ -105,6 +112,7 @@ function Game() {
       setCurrentRound(roomInfo.currentRound);
     });
     socket.on('game over', scoretable => setScoretable(scoretable));
+    socket.on('invalid', handleInvalid);
     socket.on('not joined', () => alert('Ya empezó el juego, si ya estabas jugando poné bien tu nombre y contraseña'));
 
     socket.on('cards', cards => {
@@ -121,6 +129,7 @@ function Game() {
     <>
       <Scoretable scores={scoretable} />
       <NameModal open={open} handleSubmit={handleSubmit} />
+      <Toast message={invalidMessage} />
       {me && showMessage && !currentRound.started && (
         <Message icon>
           <Icon name='circle notched' loading />
