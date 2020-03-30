@@ -11,6 +11,7 @@ function CreateGame() {
   const [endWith, setEndWith] = useState(8);
   const [gameId, setGameId] = useState(null);
   const [selectStartingPlayer, setSelectStartingPlayer] = useState(false);
+  const [mandatoryTriumph, setMandatoryTriumph] = useState(false);
   const handleSubmit = async () => {
     setIsLoading(true);
     gtag.event({
@@ -18,7 +19,12 @@ function CreateGame() {
       category: 'Create'
     });
     
-    const response = await axios.post(`${process.env.SERVER_URL}/create`, { startWith, endWith, selectStartingPlayer });
+    const response = await axios.post(`${process.env.SERVER_URL}/create`, {
+      startWith,
+      endWith,
+      selectStartingPlayer,
+      mandatoryTriumph
+    });
     setIsLoading(false);
     setGameId(response.data.id);
   };
@@ -44,9 +50,14 @@ function CreateGame() {
           onChange={(evt, { value }) => setEndWith(value)}
         />
         <Form.Checkbox
+          label='Triunfo obligatorio'
+          checked={mandatoryTriumph}
+          onChange={() => setMandatoryTriumph(!mandatoryTriumph)}
+        />
+        <Form.Checkbox
           label='Elegir jugador inicial'
           checked={selectStartingPlayer}
-          onChange={() => setSelectStartingPlayer(!selectStartingPlayer )}
+          onChange={() => setSelectStartingPlayer(!selectStartingPlayer)}
         />
         <Button color='blue' onClick={handleSubmit} loading={loading}>
           Crear
