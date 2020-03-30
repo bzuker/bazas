@@ -59,7 +59,7 @@ function Game() {
 
   const playCard = (playerId, card) => {
     if (!currentRound.doneRequestingBazas || currentRound.nextToPlay !== playerId) {
-      // TODO: Show message?
+      setInvalidMessage('No podés tirar todavía');
       return;
     }
 

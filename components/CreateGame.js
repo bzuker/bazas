@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import { Header, Form, Icon, Button } from "semantic-ui-react";
 import axios from 'axios';
+import * as gtag from '../lib/gtag'
 
 const startingAt = Array.from({ length: 8 }, (v, i) => i + 1).map(x => ({ key: x, text: `${x} ${x === 1 ? 'carta' : 'cartas'}`, value: x }));
 const endingAt = Array.from({ length: 8 }, (v, i) => i + 1).map(x => ({ key: x, text: `${x} ${x === 1 ? 'carta' : 'cartas'}`, value: x }));
@@ -12,6 +13,11 @@ function CreateGame() {
   const [selectStartingPlayer, setSelectStartingPlayer] = useState(false);
   const handleSubmit = async () => {
     setIsLoading(true);
+    gtag.event({
+      action: 'create_game',
+      category: 'Create'
+    });
+    
     const response = await axios.post(`${process.env.SERVER_URL}/create`, { startWith, endWith, selectStartingPlayer });
     setIsLoading(false);
     setGameId(response.data.id);
